@@ -5,19 +5,18 @@
 
 using namespace std;
 
-
-long getCurrentTime()
+double getCurrentTime()
 {
     struct timeval tv;
     gettimeofday(&tv, NULL);
-    return tv.tv_sec % 100 * 1000 * 1000 + tv.tv_usec;
+    return tv.tv_sec + tv.tv_usec / (1000.0 * 1000.0);
 }
 
 int main(int argc, char**argv)
 {
-    time_t old_time, now_time;
-    long time_old = getCurrentTime();
+    double time_old = getCurrentTime();
     usleep(1000 * 1000 * 2);
-    long time_now = getCurrentTime();
+    double time_now = getCurrentTime();
+    cout << "time : " << time_now - time_old << endl;
     return 0;
 }
