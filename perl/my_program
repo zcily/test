@@ -1,0 +1,14 @@
+#!/usr/bin/perl -W
+
+#use 5.014;
+
+printf ("Hello world!!!\n");
+#error about this... but i don't know why ..
+# now i know  when use the command "use 5.014"
+# commpile error about this
+@lines = `perldoc -u -fatan2`;
+
+foreach (@lines) {
+    s/\w<([^>]+)>/\U$1/g;
+    print;
+}
