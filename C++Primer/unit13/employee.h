@@ -27,6 +27,7 @@ namespace MyEmployEE
 
     class HasPtr
     {
+		friend bool operator<(const HasPtr&, const HasPtr&);
         public:
             HasPtr(const string &s = string(""))
                 :ps(new string(s))
@@ -46,7 +47,6 @@ namespace MyEmployEE
 
             HasPtr& swap(HasPtr&);
             void show();
-            bool operator<(const HasPtr&);
         private:
             string *ps;
             size_t *use;

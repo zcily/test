@@ -79,12 +79,12 @@ namespace MyEmployEE
     void HasPtr::show()
     {
         cout << "string :  "  << *this->ps << endl;
-        cout << "i      :  "  << this->i  << endl;
-        cout << "use    :  "  << *this->use << endl;
+    //    cout << "i      :  "  << this->i  << endl;
+     //   cout << "use    :  "  << *this->use << endl;
     }
 
-    bool HasPtr::operator<(const HasPtr& hp)
+    bool operator<(const HasPtr& op, const HasPtr& hp)
     {
-        return *this->ps < *hp.ps;
+        return *(op.ps) < *hp.ps;
     }
 }
