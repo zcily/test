@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <string.h>
 #include <ctype.h>
 
 using namespace std;
@@ -16,6 +17,13 @@ void add(const string & baseNumber, const string& otherNumber)
 
 	unsigned int resultInt[101] = {0};
 	unsigned int resultFl[100] = {0};
+
+	memset(baseintNumber, 0, 100);
+	memset(basefloatNumber, 0, 100);
+	memset(otherIntNumber, 0, 100);
+	memset(otherFlNumber, 0, 100);
+	memset(resultInt, 0, 100);
+	memset(resultFl, 0, 100);
 
 	string baseIntegerNumberString; 
 	string baseFloatNumberString;
@@ -55,16 +63,16 @@ void add(const string & baseNumber, const string& otherNumber)
 		otherFlNumber[100 - i - 1] = otherFloatNumberString.at(i) - '0';
 	}
 //-- end parse number to array	
-//
 
 // cal the value
 	for(int i = max(baseFloatNumberString.size(), otherFloatNumberString.size()); i > 0; --i){
-		resultFl[100 - i] = (basefloatNumber[100 - i] + otherFlNumber[100 - i]) % 10 + resultFl[100 - i];
+
 		if(i == 1){
-			beyoneValue = (basefloatNumber[100 - i] + otherFlNumber[100 - i]) / 10;
-			break;
+			beyoneValue = (basefloatNumber[100 - i] + otherFlNumber[100 - i] + resultFl[100 - i]) / 10;
+		}else {
+			resultFl[100 - i + 1] = (basefloatNumber[100 - i] + otherFlNumber[100 - i] + resultFl[100 - i]) / 10;
 		}
-		resultFl[100 - i + 1] = (basefloatNumber[100 - i] + otherFlNumber[100 - i]) / 10;
+		resultFl[100 - i] = (basefloatNumber[100 - i] + otherFlNumber[100 - i] + resultFl[100 - i]) % 10;
 	}
 
 	for(int i = 0; i < max(baseIntegerNumberString.size(), otherIntegerNumberString.size()); ++i){
