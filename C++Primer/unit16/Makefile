@@ -1,17 +1,15 @@
 # The executable file name.
 # It must be specified.
 # PROGRAM   := a.out    # the executable name
-PROGRAM   := a.out
+PROGRAM   := test
 
 # The directories in which source files reside.
 # At least one path should be specified.
 # SRCDIRS   := .        # current directory
 SRCDIRS   := .
-SRCDIRS   += ./test
 
 # add the include file
 INCLUDE := -I.\
--I./test/
 #-I./Api/ \
 -I./Api/porting_3_1/ \
 -I./WebCoreSupport/156594/ \
@@ -28,18 +26,16 @@ SRCEXTS   := .c .cpp
 # The compiling flags used only for C.
 # If it is a C++ program, no need to set these flags.
 # If it is a C and C++ merging program, set these flags for the C parts.
-CFLAGS    := -g 
-CFLAGS    += -Wall
+CFLAGS    := -g -c -Wall
 
 # The compiling flags used only for C++.
 # If it is a C program, no need to set these flags.
 # If it is a C and C++ merging program, set these flags for the C++ parts.
-CXXFLAGS  := -g
-CXXFLAGS  += --std=c++11
+CXXFLAGS  := -g -c -Wall
+#CXXFLAGS  += --std=c++11
 
 # The library and the link options ( C and C++ common).
-LDFLAGS   :=
-LDFLAGS   +=
+LDFLAGS   := -lpthread
 
 ## Implict Section: change the following only when necessary.
 ##=============================================================================
@@ -49,16 +45,8 @@ CC      = gcc
 # The C++ program compiler. Uncomment it to specify yours explicitly.
 CXX     = g++
 
-# Uncomment the 2 lines to compile C programs as C++ ones.
-CC      = $(CXX)
-CFLAGS  = $(CXXFLAGS) -o $@
-
 # The command used to delete file.
 RM        = rm -f
-
-# the -lxxxxx you want to add
-LIB     := -lpthread
-
 
 ## Stable Section: usually no need to be changed. But you can add more.
 ##=============================================================================
@@ -77,36 +65,36 @@ all : $(PROGRAM) clean
 objs : $(OBJS)
 
 %.o : %.c
-	$(CC) -c $(CFLAGS) -o $@ $< $(INCLUDE)
+	$(CC) $(CFLAGS) -o $@ $< $(INCLUDE)
 
 %.o : %.C
-	$(CXX) -c $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX) $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 %.o : %.cc
-	$(CXX) -c  $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX) $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 %.o : %.cpp
-	$(CXX) -c  $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX) $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 %.o : %.CPP
-	$(CXX) -c  $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX) $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 %.o : %.c++
-	$(CXX -c  $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 %.o : %.cp
-	$(CXX) -c  $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX) $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 %.o : %.cxx
-	$(CXX) -c  $(CXXFLAGS) -o $@ $< $(INCLUDE)
+	$(CXX) $(CXXFLAGS) -o $@  $< $(INCLUDE)
 
 # Rules for producing the executable.
 #----------------------------------------------
 $(PROGRAM) : $(OBJS)
 ifeq ($(strip $(SRCEXTS)), .c)  # C file
-	$(CC) -o $(PROGRAM) $(OBJS) $(LDFLAGS) $(LIB) $(INCLUDE)
+	$(CC) -o $(PROGRAM) $(OBJS) $(LDFLAGS) $(INCLUDE)
 else                            # C++ file
-	$(CXX) -o $(PROGRAM) $(OBJS) $(LDFLAGS) $(LIB) $(INCLUDE)
+	$(CXX) -o $(PROGRAM) $(OBJS) $(LDFLAGS) $(INCLUDE)
 endif
 
 -include $(DEPS)
