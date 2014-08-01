@@ -2,6 +2,7 @@
 #define __LIST_H__
 
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
@@ -23,7 +24,11 @@ namespace MyList
 			linkList(const linkList& olink);
 			virtual ~linkList();
 
-			linkList& operator=(const linkList&olink);
+			linkList& operator=(const linkList<T>& olink);
+			T operator[](size_t index);
+#if 0
+			T& operator[](size_t index);
+#endif
 
 			bool push_head(const T& value);
 			bool push_tail(const T& value);
@@ -37,9 +42,16 @@ namespace MyList
 
 			bool clear_all_value();
 
-			unsigned int list_length();
+			size_t list_length() const;
+			T get_value_by_index(size_t index) const;
+			bool set_value_by_index(size_t index, const T& value);
 
-			void show();
+			void show() const;
+
+//advance
+			void sort();
+			void reverseList();
+			void mergeList(linkList& olink);
 	};
 	
 	template<typename T>
@@ -62,8 +74,12 @@ namespace MyList
 	}
 			
 	template<typename T>
-	linkList<T>::linkList(const linkList& olink)
+	linkList<T>::linkList(const linkList<T>& olink)
 	{
+		clear_all_value();
+		for(size_t i = 0; i < olink.list_length(); ++i){
+			push_tail(olink.get_value_by_index(i));		
+		}	
 	}
 
 	template<typename T>
@@ -71,18 +87,47 @@ namespace MyList
 	{
 		clear_all_value();
 
-		delete first;
+		if(first)
+			delete first;
+
 		first = NULL;
 	}
 
 	template<typename T>
-	linkList<T>& linkList<T>::operator=(const linkList& olink)
+	linkList<T>& linkList<T>::operator=(const linkList<T>& olink)
 	{
 		if(this == &olink)
 			return *this;
-	
+
+		clear_all_value();
+
+		for(size_t i = 0; i < olink.list_length(); ++i){
+			this->push_tail(olink.get_value_by_index(i));		
+		}	
+
 		return *this;
 	}
+
+	template<typename T>
+	T linkList<T>::operator[](size_t index)
+	{
+		return get_value_by_index(index);	
+	}
+#if 0
+	template<typename T>
+	T& linkList<T>::operator[](size_t index)
+	{
+		Node*temp = first;
+		size_t length = 0;
+
+		while(temp) {
+			if(length++ == index) {
+				return temp->value;				
+			}
+			temp = temp->next;
+		}
+	}
+#endif
 
 	template<typename T>
 	bool linkList<T>::push_head(const T& value)
@@ -117,9 +162,7 @@ namespace MyList
 		newNode->value = value;
 		newNode->next = NULL;
 
-		if(!index)
-			first = newNode;
-		else
+		if(!index) first = newNode; else
 			index->next = newNode;	
 	
 		return true;
@@ -223,7 +266,58 @@ namespace MyList
 	}
 
 	template<typename T>
-	void linkList<T>::show()
+	size_t linkList<T>::list_length() const
+	{
+		Node* index = first;	
+		size_t length = 0;
+
+		while(index){
+			++length;
+			index = index->next;
+		}
+		return length;
+	}
+
+	template<typename T>
+	T linkList<T>::get_value_by_index(size_t index) const
+	{
+		Node*temp = first;
+		size_t length = 0;
+		T result;
+		memset(&result, 0, sizeof(result));
+
+		while(temp) {
+			if(length++ == index) {
+				result = temp->value;				
+				break;
+			}
+			temp = temp->next;
+		}
+		return  result;
+	}
+
+	template<typename T>
+	bool linkList<T>::set_value_by_index(size_t index, const T& value)
+	{
+		Node*temp = first;
+		size_t length = 0;
+		bool setFlag = false;
+
+		while(temp) {
+			if(length++ == index) {
+				temp->value = value;
+				setFlag = true;
+				break;
+			}
+			temp = temp->next;
+		}
+
+		return setFlag;
+	}
+
+
+	template<typename T>
+	void linkList<T>::show() const
 	{
 		Node*index = first;
 		if(!index){
@@ -236,6 +330,95 @@ namespace MyList
 			index = index->next;
 		}
 		cout << endl;
+	}
+
+//ÄæÐò
+	template<typename T>
+	void linkList<T>::reverseList()
+	{
+		Node* p1 = first;
+		Node* p2 = NULL;
+		Node* p3 = NULL;
+
+		if(p1)
+			p2 = p1->next;				
+
+		if(p2)
+			p3 = p2->next;
+
+		if(p1)
+			p1->next = NULL;
+
+		while(p3){
+			p2->next = p1;
+			p1 = p2;
+			p2 = p3;
+			p3 = p3->next;
+		}
+
+		if(p2) {
+			p2->next = p1;
+			first = p2;
+		}
+	}
+
+	template<typename T>
+	void linkList<T>::sort()
+	{
+		T tempValue = 0;
+		size_t index = 0;
+		for(size_t i = 0; i < list_length(); ++i){	
+			index = i;
+
+			for(size_t j = i + 1; j < list_length(); ++j){
+				if(get_value_by_index(j) < get_value_by_index(index)){
+						index = j;	
+				}
+			}
+
+			if(index != i){
+				tempValue = get_value_by_index(index);
+				set_value_by_index(index, get_value_by_index(i));
+				set_value_by_index(i, tempValue);
+			}
+		}
+	}
+
+	template<typename T>
+	void linkList<T>::mergeList(linkList<T>& olink)
+	{
+		//for ensure the list is orderly
+		sort();
+		olink.sort();
+
+		size_t orignalLength = 0;
+		size_t olinkLength = 0; 
+	
+		linkList tempList;
+
+		while(1){
+			if(olink.get_value_by_index(olinkLength) < get_value_by_index(orignalLength)){
+				tempList.push_tail(get_value_by_index(olinkLength));
+				++olinkLength;	
+			}else if(olink.get_value_by_index(olinkLength) > get_value_by_index(orignalLength)){
+				tempList.push_tail(get_value_by_index(orignalLength));
+				++orignalLength;	
+			}else {
+				tempList.push_tail(get_value_by_index(orignalLength));
+				tempList.push_tail(olink.get_value_by_index(olinkLength));
+				++orignalLength;
+				++olinkLength;
+			}
+
+			if(olinkLength >= olink.list_length()){
+				break;
+			}
+			
+			if(orignalLength >= this->list_length())
+				break;
+		}
+
+		tempList.show();
 	}
 }
 

@@ -26,18 +26,34 @@ int main(int argc, char**argv)
 	temp.modify_value(10, 11111);
 	temp.show();
 
-	int findValue = 0;
-	cin >> findValue;
+	cout << "output by get value : " << endl;
+	for(size_t i = 0; i < temp.list_length(); ++i){
+		cout << "__" << temp[i];
+	}
+	cout << endl;
 
-	cout << "want to find value : " << findValue << "   : " << (temp.find_value(findValue) ? "true" : "false") << endl;
-
-	temp.clear_all_value();
+	cout << "dsdddd " << endl;
+	for(size_t i = 0; i < temp.list_length(); ++i){
+		cout << "__" << temp[i];
+	}
+	cout << endl;
 
 	temp.show();
 
-	temp.push_value_by_postion(151, 58);
 
+	temp.sort();
+
+	linkList<int> test2;
+	for(int i = 35; i < 66; ++i){
+		test2.push_tail(i);
+		++i;
+	}
+	cout << "temp : " << endl;
 	temp.show();
+	cout << "test2 : " << endl;
+	test2.show();
+	
+	temp.mergeList(test2);
 
 	return EXIT_SUCCESS;
 }
