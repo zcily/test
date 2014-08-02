@@ -398,7 +398,7 @@ namespace MyList
 
 		while(1){
 			if(olink.get_value_by_index(olinkLength) < get_value_by_index(orignalLength)){
-				tempList.push_tail(get_value_by_index(olinkLength));
+				tempList.push_tail(olink.get_value_by_index(olinkLength));
 				++olinkLength;	
 			}else if(olink.get_value_by_index(olinkLength) > get_value_by_index(orignalLength)){
 				tempList.push_tail(get_value_by_index(orignalLength));
@@ -416,6 +416,16 @@ namespace MyList
 			
 			if(orignalLength >= this->list_length())
 				break;
+		}
+
+		if(olinkLength != olink.list_length()){
+			for(unsigned int i = olinkLength; i < olink.list_length(); ++i)	{
+				tempList.push_tail(olink.get_value_by_index(i));	
+			}
+		}else if(orignalLength != this->list_length()){
+			for(unsigned int i = orignalLength; i < this->list_length(); ++i){
+				tempList.push_tail(this->get_value_by_index(i));	
+			}
 		}
 
 		tempList.show();
