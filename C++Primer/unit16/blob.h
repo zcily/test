@@ -9,10 +9,16 @@ using namespace std;
 
 namespace Myblob
 {
+	template<typename T> void testFriend(const T&);
+
 	template<typename T> class Blob
 	{
 		typedef T value_type;
 		typedef typename vector<T>::size_type size_type;
+		
+		public:
+
+		friend void testFriend<>(const Blob<T>& b);
 
 		public:
 			Blob();
@@ -25,6 +31,7 @@ namespace Myblob
 			T& operator[] (size_type i);
 		private:
 			shared_ptr<vector<T>> data;
+			int test;
 			bool check(size_type i, const string &msg) const;
 	};
 
@@ -64,8 +71,6 @@ namespace Myblob
 			throw out_of_range(msg);
 		return true;
 	}
-
-
 }
 
 #endif

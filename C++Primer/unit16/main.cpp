@@ -91,6 +91,7 @@ void blob_test(void)
 	string temp("testing");
 	test.push_back(temp);
 
+	testFriend(test);
 	cout << test.back() << endl;
 }
 
