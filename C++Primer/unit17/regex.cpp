@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char**argv)
 {
-	string pattern("^cei");
+	string pattern("ei");
 
 #if 1
 	regex r(pattern);
