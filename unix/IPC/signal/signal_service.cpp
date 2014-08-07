@@ -78,7 +78,7 @@ int main(int argc, char**argv)
 			memset(write_buffer, '\0', sizeof(write_buffer));
 		}
 
-		unlink(service_fifo_write);
+		kill(getppid(), SIGINT);
 
 	}else {
 		int service_fifo_read_fd = 0;
@@ -113,12 +113,13 @@ int main(int argc, char**argv)
 			cout << "read from client : " << read_buffer << endl;
 			memset(read_buffer, '\0', sizeof(read_buffer));
 		}
-		waitpid(fk_pid, NULL, 0);
-		unlink(service_fifo_read);
+		kill(fk_pid, SIGINT);
 	}
 
 	close(ser_fd);
 	unlink(SER_FIFO_INFO);
+	unlink(service_fifo_write);
+	unlink(service_fifo_read);
 
 	return EXIT_SUCCESS;
 }

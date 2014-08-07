@@ -17,9 +17,9 @@ using namespace std;
 static void catch_signal(int signal_number)
 {
 	if(signal_number == SIGALRM){
-			
+		cout << "recvice the alrm signal  " << getpid() << endl;
 	}else if(signal_number == SIGCHLD){
-		cout << "the child progress quit"	 << endl;
+		kill(getpid(), SIGINT);
 	}
 }
 
@@ -79,9 +79,11 @@ int main(int argc, char**argv)
 		return EXIT_FAILURE;
 	}else if(0 == fk_pid){
 
+		cout << "the child pid : " << getpid() << endl;
 		int client_write_fd = 0;	
 		char client_write_buffer[CONTENT_BUFFER] = {0};
 		
+		alarm(4);
 		memset(client_write_buffer, '\0', sizeof(client_write_buffer));
 
 		if( (client_write_fd = open(client_fifo_info_write, O_WRONLY)) == -1){
@@ -100,9 +102,10 @@ int main(int argc, char**argv)
 			}
 			memset(client_write_buffer, '\0', sizeof(client_write_buffer));
 		}
+		kill(getppid(), SIGINT);
 
-		unlink(client_fifo_info_write);
 	}else {			
+		cout << "the father pid : " << getpid() << endl;
 		int client_read_fd = 0;
 		char client_read_buffer[CONTENT_BUFFER] = {0};
 		int readLength = 0;
@@ -115,10 +118,12 @@ int main(int argc, char**argv)
 		}
 
 		while(1){
+			cout << "before read .... " << endl;
 			if((readLength = read(client_read_fd, client_read_buffer, sizeof(client_read_buffer))) == -1){
 				perror("in client child read error : ");	
 				exit(EXIT_FAILURE);
 			}
+			cout << "after read .... " << endl;
 
 			cout << "read from service : " << client_read_buffer << endl;
 
@@ -130,12 +135,13 @@ int main(int argc, char**argv)
 			memset(client_read_buffer, '\0', sizeof(client_read_buffer));
 		}
 
-		waitpid(fk_pid, NULL, 0);
-		unlink(client_fifo_info_read);
+		kill(fk_pid, SIGINT);
 	}
 
 	close(ser_fd);
 	unlink(SER_FIFO_INFO);
+	unlink(client_fifo_info_write);
+	unlink(client_fifo_info_read);
 
 	return EXIT_SUCCESS;
 }
