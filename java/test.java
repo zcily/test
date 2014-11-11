@@ -114,5 +114,8 @@ public class test
 			}
 			System.out.println("");
 		}
+
+		System.out.println("\n\n");
+		System.out.println("55.34/ 3 = " + 55.34D / 3 + "(double)(55.34) / 3 = " + (int)(55.34) /3.0);
 	}
 }
