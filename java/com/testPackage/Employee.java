@@ -2,12 +2,19 @@ package com.testPackage;
 
 import java.util.*;
 
-public abstract class Employee
+public /*abstract*/ class Employee
 {
 	private String name;
 	private double salary;
 	private Date hireDay;
 	public static final double PI = 3.141592653;
+
+	public Employee()
+	{
+		name = "zhangwuyi";	
+		salary = 10000000;
+		hireDay = new Date(1989,05,01);
+	}
 
 	public Employee(String _name, double _s, int _year, int _month, int _day)
 	{
@@ -18,7 +25,7 @@ public abstract class Employee
 		hireDay = calendar.getTime();
 	}
 
-	public abstract void testPureFunction();
+//	public abstract void testPureFunction();
 
 	public double raiseSalary(int percent)
 	{

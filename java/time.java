@@ -27,7 +27,7 @@ public class time
 						+ " , hireDay : " + temp.getHireday());
 		}
 
-		staff[0].testPureFunction();
+		//staff[0].testPureFunction();
 
 		Manager ol = new Manager("zhangwuyi", 17000, 1989, 5, 1);
 
