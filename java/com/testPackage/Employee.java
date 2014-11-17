@@ -2,7 +2,7 @@ package com.testPackage;
 
 import java.util.*;
 
-public /*abstract*/ class Employee
+public /*abstract*/ class Employee implements Comparable, Cloneable
 {
 	private String name;
 	private double salary;
@@ -61,6 +61,26 @@ public /*abstract*/ class Employee
 	{
 		System.out.println("just to test employee");	
 		//Employee temp = new Employee("zwy", 9999999, 1989, 5, 1);
+	}
+
+	public int compareTo(Object otherObject)
+	{
+		Employee other = (Employee)otherObject;
+		System.out.println("***********  comparing!!!!");
+		return Double.compare(salary, other.salary);
+	}
+
+	public Employee clone() throws CloneNotSupportedException
+	{
+		System.out.println("employee cloning");
+
+		Employee cloned = (Employee)super.clone();
+
+		cloned.hireDay = (Date)hireDay.clone();
+		cloned.name = this.name;
+		cloned.salary = this.salary;
+
+		return cloned;
 	}
 }
 
