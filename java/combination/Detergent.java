@@ -76,9 +76,16 @@ class testRoot extends root
 */
 		System.out.println("begin in main");
 		testRoot tr = new testRoot();
+
+		root rt = new root();
 		System.out.println("end in main");
 
 //		t.showInfo(tr);
+	}
+
+	public void testDownCall()
+	{
+		System.out.println("just test call down");	
 	}
 
 	public testRoot()
